@@ -75,11 +75,11 @@ public class migration {
         */
 
         //could aslo do this: st.setArray(i, productNames); st.executeUpdate(); --Then we wouldn't need the for loop
-        for(int i = 0; i < prductNames; i++){
+        for(int i = 0; i < menuItems; i++){
             PreparedStatement st = conn.prepareStatement("INSERT INTO menu_item (item_name, menu_item_price) VALUES (?,?)");
             //Can only populate the first column with the prductNames array
             //The second column will be for the price
-            st.setString(1, prductNames[i]);
+            st.setString(1, menuItems[i]);
             //st.setDouble(2, priceeArry[i]); -- This is just an example
         }
 
