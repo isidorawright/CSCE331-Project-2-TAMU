@@ -69,6 +69,23 @@ public class migration {
           "INSERT INTO menu_item (item_name,menu_item_price) VALUES ('paper', .5);"
       );
 
+        /* SO, if I wanted to populate a table with the values in the arrays above, then I would do this:
+        //PreparedStatement is suitable for executing DML commands – SELECT, INSERT, UPDATE and DELETE
+        //To create, modify or drop a database object like a table or view you use the execute() method. This method is similar to the method executeQuery() 
+        */
+
+        //could aslo do this: st.setArray(i, productNames); st.executeUpdate(); --Then we wouldn't need the for loop
+        for(int i = 0; i < prductNames; i++){
+            PreparedStatement st = conn.prepareStatement("INSERT INTO menu_item (item_name, menu_item_price) VALUES (?,?)");
+            //Can only populate the first column with the prductNames array
+            //The second column will be for the price
+            st.setString(1, prductNames[i]);
+            //st.setDouble(2, priceeArry[i]); -- This is just an example
+        }
+
+        st.exectue();
+        st.close();
+
       statement.execute();
       statement.close();
 
