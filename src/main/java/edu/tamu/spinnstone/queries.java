@@ -1,8 +1,8 @@
 package edu.tamu.spinnstone;
 
-// QUERY 1: table containing shipment date, quantity ordered, and if shipment was fullfilled 
-SELECT shipment.shipment_date, shipment_product.shipment_ordered, shipment.fullfilled FROM shipment
-    JOIN shipment_product ON shipment.shipment_id = shipment_product.shipment_id;
+// QUERY 1: table containing shipment date, quantity ordered, and if shipment was fulfilled 
+SELECT shipment.shipment_date, shipment_product.quantity_ordered, shipment.fulfilled FROM shipment
+    JOIN shipment_product ON shipment.shipment_id = shipment_product.shipment_shipment_id;
 
 // QUERY 2: get all items on an order by order id
 SELECT * FROM "order"
@@ -30,7 +30,10 @@ SELECT product.* FROM shipment
     JOIN product ON shipment_product.product_product_id = product.product_product_id
     WHERE shipment.shipment_id = 1;
 
-// QUERY 8: 
+// QUERY 8: get all menu items on an order item by order item id
+SELECT * FROM order_item
+    JOIN menu_item ON menu_item.menu_item_id = order_item.order_item_id
+    WHERE order_item.order_item_id = 1;
 
 // QUERY 9:
 
