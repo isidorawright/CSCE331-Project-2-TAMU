@@ -62,6 +62,9 @@ public class PgObject {
       case LONG:
         insertStatement.setLong(index, (Long) value);
         break;
+      case BOOLEAN:
+        insertStatement.setBoolean(index, (Boolean) value);
+        break;
     }
   }
 

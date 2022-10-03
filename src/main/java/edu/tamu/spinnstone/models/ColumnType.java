@@ -7,5 +7,6 @@ public enum ColumnType {
   INT,
   BOOL,
   LONG,
-  DOUBLE
+  DOUBLE,
+  BOOLEAN
 }
