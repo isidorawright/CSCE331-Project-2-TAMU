@@ -4,13 +4,19 @@ package edu.tamu.spinnstone;
 SELECT shipment.shipment_date, shipment_product.shipment_ordered, shipment.fullfilled FROM shipment
     JOIN shipment_product ON shipment.shipment_id = shipment_product.shipment_id;
 
-// QUERY 2: get specific order by order id
+// QUERY 2: get all items on an order by order id
+SELECT * FROM "order"
+    JOIN order_item ON order_item.order_id = "order".order_id
+    WHERE "order".order_id = 1;
 
 // QUERY 3: get view of all orders
+SELECT * FROM "order";
 
 // QUERY 4: view all inventory (the products table)
+SELECT * FROM product;
 
 // QUERY 5: view shipment history (the shipments table)
+SELECT * FROM shipment;
 
 // QUERY 6: get all of the products associated with specific order item
 SELECT product.* FROM order_item
@@ -20,7 +26,9 @@ SELECT product.* FROM order_item
 
 // QUERY 7: find all products on a shipment 
 SELECT product.* FROM shipment
-    JOIN shipment_product 
+    JOIN shipment_product ON shipment_product.shipment_shipment_id = shipment.shipment_id
+    JOIN product ON shipment_product.product_product_id = product.product_product_id
+    WHERE shipment.shipment_id = 1;
 
 // QUERY 8: 
 
