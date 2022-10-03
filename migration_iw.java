@@ -1,16 +1,16 @@
-package edu.tamu.spinnstone;
+    package edu.tamu.spinnstone;
 
-import java.sql.*;
-import java.util.Properties;
+    import java.sql.*;
+    import java.util.Properties;
 
-/*
- * Product names array holds all products used (ingredients(toppings), boxes, drinks, etc.)
- * Menu Items array holds the names for all the items on the menu
- * These two arrays hold all the components that we will need to populate the other tables as orders and shipments are placed
- */
+    /*
+    * Product names array holds all products used (ingredients(toppings), boxes, drinks, etc.)
+    * Menu Items array holds the names for all the items on the menu
+    * These two arrays hold all the components that we will need to populate the other tables as orders and shipments are placed
+    */
 
-public class migration {
-  public static void makeProducts() {
+    public class migration {
+    public static void makeProducts() {
     // String[] productNames = {
     //     "Fountain Cup",
     //     "Boxes",
@@ -54,20 +54,20 @@ public class migration {
     //   "gatorade",
     //   "fountain drink"
     // };
-  }
+    }
 
-  public static void up() {
+    public static void up() {
     String url = "jdbc:postgresql://csce-315-db.engr.tamu.edu:5432/csce331_904_52";
     Properties props = new Properties();
     props.setProperty("user", "csce331_904_isidora");
     props.setProperty("password", "Csce331!");
 
     try {
-      Connection conn = DriverManager.getConnection(url, props);
+        Connection conn = DriverManager.getConnection(url, props);
 
-      PreparedStatement statement = conn.prepareStatement(
-          "INSERT INTO menu_item (item_name,menu_item_price) VALUES ('paper', .5);"
-      );
+        PreparedStatement statement = conn.prepareStatement(
+            "INSERT INTO menu_item (item_name,menu_item_price) VALUES ('paper', .5);"
+        );
 
         /* SO, if I wanted to populate a table with the values in the arrays above, then I would do this:
         //PreparedStatement is suitable for executing DML commands – SELECT, INSERT, UPDATE and DELETE
@@ -75,7 +75,7 @@ public class migration {
         */
 
         //could aslo do this: st.setArray(i, productNames); st.executeUpdate(); --Then we wouldn't need the for loop
-        for(int i = 0; i < menuItems; i++){
+        for(int i = 0; i < menuItems; ++i){
             PreparedStatement st = conn.prepareStatement("INSERT INTO menu_item (item_name, menu_item_price) VALUES (?,?)");
             //Can only populate the first column with the prductNames array
             //The second column will be for the price
@@ -86,13 +86,20 @@ public class migration {
         st.exectue();
         st.close();
 
-      statement.execute();
-      statement.close();
+        //Making a new SQL Command
+        //Im making this up, but this is an example of what we need to do
+        //Let's say that I want a table that contains the shipment date, quantity ordered, and if shipment fullfilled -- correlate with shipment ID
+        SELECT shipment.shipment_date, shipment_has_products.shipment_ordered, shipment.fullfilled FROM shipment 
+            INNER JOIN shipment_has_products ON shipment.shipment_id=shipment_has_products.shipment_id;
 
-    } catch (Exception e) {
-      System.out.println(e);
+        statement.execute();
+        statement.close();
+
+    } 
+    catch (Exception e) {
+        System.out.println(e);
 
     }
 
-  }
-}
+    }
+    }
