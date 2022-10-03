@@ -1,73 +1,66 @@
 package edu.tamu.spinnstone;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Properties;
 
-public class migration {
-  public static void makeProducts() {
-    // String[] productNames = {
-    //     "Fountain Cup",
-    //     "Bottle Beverage",
-    //     "Gatorade",
-    //     "Cauliflower",
-    //     "Standard",
-    //     "Alfredo",
-    //     "Traditional Red",
-    //     "Zesty Red",
-    //     "House Blend",
-    //     "Parmesan",
-    //     "BBQ Sauce",
-    //     "Olive Oil",
-    //     "Oregano",
-    //     "Ranch",
-    //     "Sriracha",
-    //     "Diced Ham",
-    //     "Italian Sausage",
-    //     "Meatball",
-    //     "Pepperoni",
-    //     "Salami",
-    //     "Smoked Chicken",
-    //     "Banana Peppers",
-    //     "Black Olives",
-    //     "Green Peppers",
-    //     "Jalapenos",
-    //     "Mushrooms",
-    //     "Onions",
-    //     "Pineapple",
-    //     "Roasted Garlic",
-    //     "Spinach",
-    //     "Tomatoes"
-    // };
-    // String[] menuItems = {
-    //   "one topping pizza",
-    //   "two - four topping pizza",
-    //   "orginal cheese pizza",
-    //   "bottled beverage",
-    //   "gatorade",
-    //   "fountain drink"
-    // };
+import edu.tamu.spinnstone.models.Product;
+
+public class Migration {
+  Connection connection;
+
+  public Migration(String username, String password, String databaseUrl) throws SQLException {
+    String url = databaseUrl;
+    Properties props = new Properties();
+    props.setProperty("user", username);
+    props.setProperty("password", password);
+    this.connection = DriverManager.getConnection(url, props);
   }
 
-  public static void up() {
-    String url = "jdbc:postgresql://csce-315-db.engr.tamu.edu:5432/csce331_904_52";
-    Properties props = new Properties();
-    props.setProperty("user", "csce331_904_kevin");
-    props.setProperty("password", "friendlyalpaca");
 
-    try {
-      Connection conn = DriverManager.getConnection(url, props);
+  public void populate() throws SQLException {
+    String[] productNames = {
+        "Fountain Cup",
+        "Bottle Beverage",
+        "Gatorade",
+        "Cauliflower",
+        "Standard",
+        "Alfredo",
+        "Traditional Red",
+        "Zesty Red",
+        "House Blend",
+        "Parmesan",
+        "BBQ Sauce",
+        "Olive Oil",
+        "Oregano",
+        "Ranch",
+        "Sriracha",
+        "Diced Ham",
+        "Italian Sausage",
+        "Meatball",
+        "Pepperoni",
+        "Salami",
+        "Smoked Chicken",
+        "Banana Peppers",
+        "Black Olives",
+        "Green Peppers",
+        "Jalapenos",
+        "Mushrooms",
+        "Onions",
+        "Pineapple",
+        "Roasted Garlic",
+        "Spinach",
+        "Tomatoes"
+    };
 
-      PreparedStatement statement = conn.prepareStatement(
-          "INSERT INTO menu_item (item_name,menu_item_price) VALUES ('soda', 2);"
-      );
+    ArrayList<Product> products = new ArrayList<Product>();
 
-      statement.execute();
-      statement.close();
+    // for (int i = 0; i < productNames.length; i++) {
+    //   products.add(new Product(i, productNames[i], 0, this.connection));
+    // }
 
-    } catch (Exception e) {
-      System.out.println(e);
+    Product p = Product.create(this.connection, "Test Product");
 
-    }
-
+    System.out.println(p.id);
   }
 }
