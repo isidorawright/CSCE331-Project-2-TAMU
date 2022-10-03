@@ -21,6 +21,7 @@ public class Migration {
   }
 
 
+
   public void generateRandomOrder(boolean gameday, Date orderDate) {
     // TODO: choose random order items and update order total 
     // TODO: add to database 
@@ -29,6 +30,7 @@ public class Migration {
 
 
   public void populate() throws SQLException { 
+
     String[] productNames = {
         "Fountain Cup",
         "Bottle Beverage",
