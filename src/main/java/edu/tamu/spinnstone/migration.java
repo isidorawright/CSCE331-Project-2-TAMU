@@ -17,7 +17,6 @@ public class Migration {
     this.connection = DriverManager.getConnection(url, props);
   }
 
-
   public void populate() throws SQLException {
     String[] productNames = {
         "Fountain Cup",
