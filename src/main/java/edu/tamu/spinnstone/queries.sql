@@ -60,10 +60,15 @@ UPDATE menu_item SET menu_item_price = ? WHERE menu_item.menu_item_id = ?;
 -- // Add a new shipment, TODO needs to update linking table (add products & amounts in shipment)
 insert into shipment (shipment_date, fulfilled) values ('09/18/2022', false)
 
-
 -- // Calculate cost of order (to update order table)
 select sum(menu_item_price) from order_item
 	join menu_item on menu_item.menu_item_id = order_item.menu_item_id
     where order_item.order_id = ?;
+    
 -- // update order with new cost
 update "order" set order_total = ? where order_id = 1
+
+-- // add new product to shipment /  update existing shipping entry
+
+insert into shipment_product (shipment_shipment_id, product_product_id, quantity_ordered) values ()
+update shipment_product set quantity_ordered =  69 where shipment_shipment_id = 1 and product_product_id = 1

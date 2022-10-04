@@ -3,6 +3,8 @@ package edu.tamu.spinnstone;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
+
 import edu.tamu.spinnstone.models.MenuItem;
 
 
@@ -115,17 +117,40 @@ public class Migration {
     // two gamedays, provide date 
     
     /* Updates all order totals */
-    for(int i = 1; i <= 230; ++i) {
-      PreparedStatement query = connection.prepareStatement("select sum(menu_item_price) from order_item join menu_item on menu_item.menu_item_id = order_item.menu_item_id where order_item.order_id = " + i + ";");
+    /*
+    for (int i = 1; i <= 230; ++i) {
+      PreparedStatement query = connection.prepareStatement(
+          "select sum(menu_item_price) from order_item " +
+          "join menu_item on menu_item.menu_item_id = order_item.menu_item_id " +
+          "where order_item.order_id = " + i + ";");
       query.execute();
       ResultSet result = query.getResultSet();
       result.next();
       float order_total = result.getFloat(1);
       query.clearParameters();
-      
+
       query = connection.prepareStatement("update \"order\" set order_total = " + order_total + " where order_id = " + i);
       query.execute();
       query.clearParameters();
     }
+    */
+
+
+
+    // For each shipment
+    for (int i = 1; i <= 2; ++i) {
+      // For each product
+      for (int j = 1; j <= 31; ++j) {
+        // Add product to shipment
+        int qty = (500 + (int) (200 * Math.random()));
+        PreparedStatement query = connection.prepareStatement(
+          // "insert into shipment_product (shipment_shipment_id, product_product_id, quantity_ordered) values (" + i + ", " + j + ", " + qty + ")"
+          "update shipment_product set quantity_ordered = " + qty + " where shipment_shipment_id = " + i + " and product_product_id = " + j + ";"
+        );
+        query.execute();
+        query.clearParameters();
+      }
+    }
+
   }
 }
