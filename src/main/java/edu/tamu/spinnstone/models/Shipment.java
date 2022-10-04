@@ -4,11 +4,11 @@ import java.sql.*;
 import java.util.Arrays;
 
 public class Shipment extends PgObject {
-  public long shipment_id;
-  public Date shipment_date;
+  public long shipmentId;
+  public Date shipmentDate;
   public Boolean fulfilled;
 
-  public Shipment(Connection conn, long shipment_id, Date shipment_date, Boolean fulfilled) throws SQLException {
+  public Shipment(Connection conn, long shipmentId, Date shipmentDate, Boolean fulfilled) throws SQLException {
     super(
       conn,
       "shipment",
@@ -16,15 +16,15 @@ public class Shipment extends PgObject {
       Arrays.asList(ColumnType.LONG, ColumnType.DATE, ColumnType.BOOLEAN)
     );
 
-    this.shipment_id = shipment_id;
-    this.shipment_date = shipment_date;
+    this.shipmentId = shipmentId;
+    this.shipmentDate = shipmentDate;
     this.fulfilled = fulfilled;
   }
 
   public long insert() throws SQLException {
     Object[] values = {
-      this.shipment_id,
-      this.shipment_date,
+      this.shipmentId,
+      this.shipmentDate,
       this.fulfilled
     };
     
@@ -33,16 +33,16 @@ public class Shipment extends PgObject {
     );
   }
 
-  public static Shipment create(Connection conn, Date shipment_date, Boolean fulfilled) throws SQLException {
+  public static Shipment create(Connection conn, Date shipmentDate, Boolean fulfilled) throws SQLException {
     Shipment p = new Shipment(
       conn,
       0,
-      shipment_date,
+      shipmentDate,
       fulfilled
     );
 
     long id = p.insert();
-    p.shipment_id = id;
+    p.shipmentId = id;
 
     return p;
   }

@@ -5,30 +5,32 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Product extends PgObject {
-    public long id;
-    public String product_name;
-    public double quantity_in_stock;
+    public long productId;
+    public String productName;
+    public double quantityInStock;
 
 
-    public Product(Connection conn, long id, String product_name, double quantity_in_stock) throws SQLException {
+
+
+    public Product(Connection conn, long productId, String productName, double quantityInStock) throws SQLException {
         super(
           conn,
           "product",
-          Arrays.asList("id", "product_name", "quantity_in_stock"),
+          Arrays.asList("product_id", "product_name", "quantity_in_stock"),
           Arrays.asList(ColumnType.LONG, ColumnType.STRING, ColumnType.DOUBLE)
         );
 
-      this.product_name = product_name;
-      this.quantity_in_stock = quantity_in_stock;
+      this.productName = productName;
+      this.quantityInStock = quantityInStock;
 
     }
 
     
     public long insert() throws SQLException {
       Object[] values = {
-        this.id,
-        this.product_name,
-        this.quantity_in_stock
+        this.productId,
+        this.productName,
+        this.quantityInStock
       };
       
       return super.insert(
@@ -44,8 +46,8 @@ public class Product extends PgObject {
         0.0
       );
 
-      long id = p.insert();
-      p.id = id;
+      long productId = p.insert();
+      p.productId = productId;
 
       return p;
     }
