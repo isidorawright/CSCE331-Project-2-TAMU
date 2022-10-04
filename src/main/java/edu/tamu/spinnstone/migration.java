@@ -84,7 +84,7 @@ public class Migration {
     };
 
     // add products to inventory// add products to inventory
-    ArrayList<Product> products = new ArrayList<Product>();
+    //ArrayList<Product> products = new ArrayList<Product>();
 
     //Adds products to menu_item
     // ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
@@ -113,5 +113,19 @@ public class Migration {
 
     // TODO: generate and add x random orders to database
     // two gamedays, provide date 
+    
+    /* Updates all order totals */
+    for(int i = 1; i <= 230; ++i) {
+      PreparedStatement query = connection.prepareStatement("select sum(menu_item_price) from order_item join menu_item on menu_item.menu_item_id = order_item.menu_item_id where order_item.order_id = " + i + ";");
+      query.execute();
+      ResultSet result = query.getResultSet();
+      result.next();
+      float order_total = result.getFloat(1);
+      query.clearParameters();
+      
+      query = connection.prepareStatement("update \"order\" set order_total = " + order_total + " where order_id = " + i);
+      query.execute();
+      query.clearParameters();
+    }
   }
 }
