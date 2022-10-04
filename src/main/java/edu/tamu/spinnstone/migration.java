@@ -14,12 +14,12 @@ import edu.tamu.spinnstone.models.Order;
 import edu.tamu.spinnstone.models.OrderItem;
 import edu.tamu.spinnstone.models.Product;
 
-public class Migration {
+public class migration {
   Connection connection;
   String projectRoot;
 
 
-  public Migration(String username, String password, String databaseUrl) throws SQLException {
+  public migration(String username, String password, String databaseUrl) throws SQLException {
     String url = databaseUrl;
     Properties props = new Properties();
     props.setProperty("user", username);

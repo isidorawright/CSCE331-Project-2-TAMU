@@ -6,7 +6,7 @@ public final class App {
 
     public static void main(String[] args) {
       try {
-        Migration migration = new Migration(
+        migration migration = new migration(
             "csce331_904_kevin",
             "friendlyalpaca",
             "jdbc:postgresql://csce-315-db.engr.tamu.edu:5432/csce331_904_52"
