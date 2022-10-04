@@ -1,35 +1,36 @@
 package edu.tamu.spinnstone.models;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.Arrays;
 
 public class Order extends PgObject {
-    public long order_id;
-    public Date order_date;
-    public double order_total;
+    public long orderId;
+    public Date orderDate;
+    public BigDecimal orderTotal;
 
 
-    public Order(Connection conn, long order_id, Date order_date, double order_total) throws SQLException {
+    public Order(Connection conn, long orderId, Date orderDate, BigDecimal orderTotal) throws SQLException {
         super(
           conn,
-          "order_item",
+          "\"order\"",
           Arrays.asList("order_id", "order_date", "order_total"),
-          Arrays.asList(ColumnType.LONG, ColumnType.DATE, ColumnType.DOUBLE)
+          Arrays.asList(ColumnType.LONG, ColumnType.DATE, ColumnType.MONEY)
         );
 
-      this.order_id = order_id;
-      this.order_date = order_date;
-      this.order_total = order_total;
+      this.orderId = orderId;
+      this.orderDate = orderDate;
+      this.orderTotal = orderTotal;
     }
 
     
     public long insert() throws SQLException {
       Object[] values = {
-        this.order_id,
-        this.order_date,
-        this.order_total
+        this.orderId,
+        this.orderDate,
+        this.orderTotal
       };
       
       return super.insert(
@@ -37,16 +38,16 @@ public class Order extends PgObject {
       );
     }
 
-    public static Order create(Connection conn, long order_id, Date order_date, double order_total) throws SQLException {
+    public static Order create(Connection conn, Date orderDate, BigDecimal orderTotal) throws SQLException {
       Order p = new Order(
         conn,
         0,
-        order_date,
-        order_total
+        orderDate,
+        orderTotal
       );
 
       long id = p.insert();
-      p.order_id = id;
+      p.orderId = id;
 
       return p;
     }

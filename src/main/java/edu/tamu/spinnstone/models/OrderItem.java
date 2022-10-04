@@ -1,16 +1,17 @@
 package edu.tamu.spinnstone.models;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 
 public class OrderItem extends PgObject {
-    public long order_item_id;
-    public long order_id;
-    public long menu_item_id;
+    public long orderItemId;
+    public long orderId;
+    public long menuItemId;
 
 
-    public OrderItem(Connection conn, long order_item_id, long order_id, long menu_item_id) throws SQLException {
+    public OrderItem(Connection conn, long orderItemId, long orderId, long menuItemId) throws SQLException {
         super(
           conn,
           "order_item",
@@ -18,16 +19,16 @@ public class OrderItem extends PgObject {
           Arrays.asList(ColumnType.LONG, ColumnType.LONG, ColumnType.LONG)
         );
 
-      this.order_id = order_id;
-      this.menu_item_id = menu_item_id;
+      this.orderId = orderId;
+      this.menuItemId = menuItemId;
     }
 
     
     public long insert() throws SQLException {
       Object[] values = {
-        this.order_item_id,
-        this.order_id,
-        this.menu_item_id
+        this.orderItemId,
+        this.orderId,
+        this.menuItemId
       };
       
       return super.insert(
@@ -35,18 +36,27 @@ public class OrderItem extends PgObject {
       );
     }
 
-    public static OrderItem create(Connection conn, long order_id, long menu_item_id) throws SQLException {
+    public static OrderItem create(Connection conn, long orderId, long menuItemId) throws SQLException {
       OrderItem p = new OrderItem(
         conn,
         0,
-        order_id,
-        menu_item_id
+        orderId,
+        menuItemId
       );
 
       long id = p.insert();
-      p.order_item_id = id;
+      p.orderItemId = id;
 
       return p;
+    }
+
+    public void addProduct(long productId) throws SQLException {
+      PreparedStatement statement = connection.prepareStatement(
+        String.format("INSERT INTO order_item_product (order_item_order_item_id, product_product_id) VALUES (%s,%s)", orderItemId, productId)
+      );
+
+      statement.execute();
+      
     }
 
 }

@@ -1,16 +1,23 @@
 package edu.tamu.spinnstone;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
-import edu.tamu.spinnstone.models.MenuItem;
-
 
 import edu.tamu.spinnstone.models.MenuItem;
+import edu.tamu.spinnstone.models.Order;
+import edu.tamu.spinnstone.models.OrderItem;
 import edu.tamu.spinnstone.models.Product;
 
 public class Migration {
   Connection connection;
+  String projectRoot;
+
 
   public Migration(String username, String password, String databaseUrl) throws SQLException {
     String url = databaseUrl;
@@ -18,19 +25,49 @@ public class Migration {
     props.setProperty("user", username);
     props.setProperty("password", password);
     this.connection = DriverManager.getConnection(url, props);
+    this.projectRoot = System.getProperty("user.dir");
+  }
+
+  public void createTables() throws SQLException, IOException {
+    String sql = new String(Files.readAllBytes(Path.of(projectRoot, "src/sql/build_tables.sql")));
+    connection.createStatement().execute(sql);
+  }
+
+  public void dropTables() throws SQLException, IOException {
+    String sql = new String(Files.readAllBytes(Path.of(projectRoot, "src/sql/drop_tables.sql")));
+    connection.createStatement().execute(sql);
   }
 
 
+  public ArrayList<Order> generateRandomOrder(ArrayList<MenuItem> menu, ArrayList<Product> products, boolean gameday, Date orderDate) throws SQLException {
+    
+    // choose a random menu item from the menu
+    ArrayList<OrderItem> orderItems = new ArrayList<OrderItem>();
 
-  public void generateRandomOrder(boolean gameday, Date orderDate) {
-    // TODO: choose random order items and update order total 
-    // TODO: add to database 
-    return;
+    ArrayList<Order> orders = new ArrayList<Order>();
+    
+    Order order = Order.create(connection, orderDate, new BigDecimal("0.0"));
+
+    for(int i = 0; i < 3; i++) {
+      int randomIndex = (int) (Math.random() * menu.size());
+      MenuItem menuItem = menu.get(randomIndex);
+      OrderItem orderItem = OrderItem.create(this.connection, order.orderId, menuItem.menuItemId);
+      orderItems.add(orderItem);
+      // choose a random product from the products
+      for(int j = 0; j < 5; j++) {
+        int productIndex = (int) (Math.random() * products.size());
+        Product product = products.get(productIndex);
+        orderItem.addProduct(product.productId);
+      }
+    }
+
+    return orders;
+    
+    
   } 
 
 
-  public void populate() throws SQLException { 
-
+  public void populate() throws SQLException, IOException  { 
     String[] productNames = {
         "Fountain Cup",
         "Bottle Beverage",
@@ -75,43 +112,62 @@ public class Migration {
      };
       
 
-    Double[] menuItemPrices = {
-      7.79,
-      8.99,
-      6.79,
-      2.39,
-      2.39
+    String[] menuItemPrices = {
+      "7.79",
+      "8.99",
+      "6.79",
+      "2.39",
+      "2.39",
+      "1.99",
     };
 
-    // add products to inventory// add products to inventory
+    dropTables();
+    createTables();
+
+    // Product p = Product.create(this.connection, "Fountain Cup");
+    // MenuItem m = MenuItem.create(this.connection, "one topping pizza",  new BigDecimal("7.75"));
+    // Order o = Order.create(this.connection, new Date(2020, 1, 1), new BigDecimal("0.0"));
+    // OrderItem oi = OrderItem.create(this.connection, o.orderId, m.menuItemId);
+    // oi.addProduct(p.productId);
+    
+
+    // add products to inventory
     ArrayList<Product> products = new ArrayList<Product>();
 
+    for (int i = 0; i < productNames.length; i++) {
+      Product p = Product.create(this.connection, productNames[i]);
+      products.add(p);
+    }
+    
     //Adds products to menu_item
-    // ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
+    ArrayList<MenuItem> menu = new ArrayList<MenuItem>();
     
-    //  // add products to menu_item    
+    for (int i = 0; i < menuItems.length; i++) {
+      MenuItem m = MenuItem.create(this.connection, menuItems[i], new BigDecimal(menuItemPrices[i]));
+      menu.add(m);
+    }
 
-
-    // } 
-    // for (int i = 0; i < menuItems.length; i++) {
-    //   menu.add(m);
-
-
-
-    // // start on 9/4/2022,     for(int day = 4, day < 25, ++day){
-    //   Date date = new Date(2022, 9, da
-      // y);
-    //   for(){
-
-    //   }
-    // }        mrmal day, 400 order s s pe;r gameday
-    // Date tartDate = ne w Date() 
     
-     //Product p = Product.create(this.connection, "Test Product");
+    // generate and add random orders to database
+    // 215 orders per normal day, 400 orders per gameday
+    // goes from 9/4 to 9/24; game days are 9/10 and 9/24
 
-    // System.out.println(p.id);
+    Date gameday1 = Date.valueOf(LocalDate.of(2022, 9, 10));
+    Date gameday2 = Date.valueOf(LocalDate.of(2022, 9, 24));
 
-    // TODO: generate and add x random orders to database
-    // two gamedays, provide date 
+    for(int day = 4; day < 25; ++day){
+      Date date = Date.valueOf(LocalDate.of(2022, 9, day));
+      int numOrders = 10;
+      boolean gameday = false;
+      
+      if(date.compareTo(gameday1) == 0 || date.compareTo(gameday2) == 0){
+        numOrders = 20;
+        gameday = true;
+      }
+
+      for(int order = 0; order < numOrders; ++order){
+        generateRandomOrder(menu, products, gameday, date);
+      }
+    }
   }
 }

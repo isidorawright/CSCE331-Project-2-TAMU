@@ -8,5 +8,6 @@ public enum ColumnType {
   BOOL,
   LONG,
   DOUBLE,
-  BOOLEAN
+  BOOLEAN,
+  MONEY
 }

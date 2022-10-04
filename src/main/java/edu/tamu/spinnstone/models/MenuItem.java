@@ -1,35 +1,36 @@
 package edu.tamu.spinnstone.models;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 
 public class MenuItem extends PgObject {
-    public long menu_item_id;
-    public String item_name;
-    public double menu_item_price;
+    public long menuItemId;
+    public String itemName;
+    public BigDecimal menuItemPrice;
 
 
-    public MenuItem(Connection conn, long menu_item_id, String item_name, double menu_item_price) throws SQLException {
+    public MenuItem(Connection conn, long menuItemId, String itemName, BigDecimal menuItemPrice) throws SQLException {
         super(
           conn,
           "menu_item",
           Arrays.asList("menu_item_id", "item_name", "menu_item_price"),
-          Arrays.asList(ColumnType.LONG, ColumnType.STRING, ColumnType.DOUBLE)
+          Arrays.asList(ColumnType.LONG, ColumnType.STRING, ColumnType.MONEY)
         );
 
-      this.menu_item_id = menu_item_id;
-      this.item_name = item_name;
-      this.menu_item_price = menu_item_price;
+      this.menuItemId = menuItemId;
+      this.itemName = itemName;
+      this.menuItemPrice = menuItemPrice;
 
     }
 
     
     public long insert() throws SQLException {
       Object[] values = {
-        this.menu_item_id,
-        this.item_name,
-        this.menu_item_price
+        this.menuItemId,
+        this.itemName,
+        this.menuItemPrice
       };
       
       return super.insert(
@@ -37,16 +38,16 @@ public class MenuItem extends PgObject {
       );
     }
 
-    public static MenuItem create(Connection conn, String item_name, double menu_item_price) throws SQLException {
+    public static MenuItem create(Connection conn, String itemName, BigDecimal menuItemPrice) throws SQLException {
       MenuItem p = new MenuItem(
         conn,
         0,
-        item_name,
-        menu_item_price
+        itemName,
+        menuItemPrice
       );
 
       long id = p.insert();
-      p.menu_item_id = id;
+      p.menuItemId = id;
 
       return p;
     }
