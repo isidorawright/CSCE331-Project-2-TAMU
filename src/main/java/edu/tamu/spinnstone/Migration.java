@@ -13,6 +13,7 @@ import edu.tamu.spinnstone.models.MenuItem;
 import edu.tamu.spinnstone.models.Order;
 import edu.tamu.spinnstone.models.OrderItem;
 import edu.tamu.spinnstone.models.Product;
+import edu.tamu.spinnstone.models.Shipment;
 
 public class Migration {
   Connection connection;
@@ -124,18 +125,25 @@ public class Migration {
     dropTables();
     createTables();
 
-    // Product p = Product.create(this.connection, "Fountain Cup");
-    // MenuItem m = MenuItem.create(this.connection, "one topping pizza",  new BigDecimal("7.75"));
-    // Order o = Order.create(this.connection, new Date(2020, 1, 1), new BigDecimal("0.0"));
-    // OrderItem oi = OrderItem.create(this.connection, o.orderId, m.menuItemId);
-    // oi.addProduct(p.productId);
+    
+    // Product.getAll(connection).forEach(product -> {
+    //   Double qty = Math.floor(Math.random() * 10000)/100;
+    //   try {
+    //     product.updateQuantity(qty);
+    //   } catch (Exception e) {
+    //     e.printStackTrace();
+    //   }
+    // });
+
+
     
 
-    // add products to inventory
+    // // add products to inventory
     ArrayList<Product> products = new ArrayList<Product>();
 
     for (int i = 0; i < productNames.length; i++) {
-      Product p = Product.create(this.connection, productNames[i]);
+      Double qty = Math.floor(Math.random() * 100)/100d;
+      Product p = Product.create(this.connection, productNames[i], qty);
       products.add(p);
     }
     
@@ -167,6 +175,18 @@ public class Migration {
 
       for(int order = 0; order < numOrders; ++order){
         generateRandomOrder(menu, products, gameday, date);
+      }
+    }
+
+    // create shipments
+    for (int i = 0; i <= 2; ++i) {
+      Shipment shipment = Shipment.create(connection, new Date(2020,1,(i + 1) * 8), false);
+
+      // For each product
+      for (Product product : products) {
+        // Add product to shipment
+        int qty = (500 + (int) (200 * Math.random()));
+        shipment.addProduct(product.productId, qty);
       }
     }
   }
