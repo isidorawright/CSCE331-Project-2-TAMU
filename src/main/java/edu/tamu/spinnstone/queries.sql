@@ -1,5 +1,5 @@
 --  QUERY 1: table containing shipment date, quantity ordered, and if shipment was fulfilled 
-SELECT shipment.shipment_date, shipment_product.quantity_ordered, shipment.fulfilled FROM shipment
+SELECT shipment.shipment_date, shipment_product.quantity_ordered, shipment.shipment_id, shipment.fulfilled FROM shipment
     JOIN shipment_product ON shipment.shipment_id = shipment_product.shipment_shipment_id;
 
 --  QUERY 2: get all items on an order by order id
@@ -31,28 +31,28 @@ SELECT product.* FROM shipment
 -- // QUERY 8: get all menu items on an order item by order item id
 SELECT * FROM order_item
     JOIN menu_item ON menu_item.menu_item_id = order_item.order_item_id
-    WHERE order_item.order_item_id = 1;
+    WHERE order_item.order_item_id = ?;
 
 -- // QUERY 9: get list of all menu items
-SELECT * FROM menu_item
+SELECT * FROM menu_item;
 
 -- // QUERY 10: set shipment to fulfilled
-UPDATE shipment SET shipment_fulfilled = true WHERE shipment.shipment_id = ?;
+UPDATE shipment SET fulfilled = true WHERE shipment.shipment_id = ?;
 
 -- // QUERY 11: update product quantity
-UPDATE product SET quantity_in_stock = ? WHERE product.product_id = 3;
+UPDATE product SET quantity_in_stock = ? WHERE product.product_id = ?;
 
--- // QUERY 12: delete shipment by shipment_id
+-- // QUERY 12: update price by menu_item_id
+UPDATE menu_item SET menu_item_price = ? WHERE menu_item.menu_item_id = ?;
+
+-- // QUERY 13: delete shipment by shipment_id
 DELETE FROM shipment WHERE shipment.shipment_id = ?;
 
--- // QUERY 13: delete menu_item by menu_item_id
+-- // QUERY 14: delete menu_item by menu_item_id
 DELETE FROM menu_item WHERE menu_item.menu_item_id = ?;
 
--- // QUERY 14: delete product by product_id
+-- // QUERY 15: delete product by product_id
 DELETE FROM product WHERE product.product_id = ?;
-
--- // QUERY 15: update price by menu_item_id
-UPDATE menu_item SET menu_item_price = ? WHERE menu_item.menu_item_id = ?;
 
 
 -- // Extra queries for future interactivity
