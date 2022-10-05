@@ -169,5 +169,20 @@ public class Migration {
         generateRandomOrder(menu, products, gameday, date);
       }
     }
+
+    // create shipments
+    for (int i = 1; i <= 2; ++i) {
+      // For each product
+      for (int j = 1; j <= 31; ++j) {
+        // Add product to shipment
+        int qty = (500 + (int) (200 * Math.random()));
+        PreparedStatement query = connection.prepareStatement(
+          // "insert into shipment_product (shipment_shipment_id, product_product_id, quantity_ordered) values (" + i + ", " + j + ", " + qty + ")"
+          "update shipment_product set quantity_ordered = " + qty + " where shipment_shipment_id = " + i + " and product_product_id = " + j + ";"
+        );
+        query.execute();
+        query.clearParameters();
+      }
+    }
   }
 }
