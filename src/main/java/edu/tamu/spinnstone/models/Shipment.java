@@ -46,5 +46,19 @@ public class Shipment extends PgObject {
 
     return p;
   }
+
+  public void addProduct(long productId, double quantityOrdered) throws SQLException {
+    PreparedStatement statement = connection.prepareStatement(
+      String.format(
+        "INSERT INTO shipment_product (shipment_shipment_id, product_product_id, quantity_ordered) VALUES (%s,%s,%s)",
+        shipmentId,
+        productId,
+        quantityOrdered
+      )
+    );
+
+    statement.execute();
+    
+  }
   
 }
